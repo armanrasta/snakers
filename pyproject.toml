@@ -1,0 +1,65 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "snakers"
+version = "0.1.0"
+description = "Interactive Python exercises with Ruff linting - Learn Python by fixing code!"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [{name = "Your Name", email = "your.email@example.com"}]
+keywords = ["python", "learning", "exercises", "tutorial", "ruff", "linting"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Education",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Education",
+    "Topic :: Software Development :: Code Generators",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "ruff>=0.1.0",
+    "rich>=13.0.0",
+    "watchdog>=3.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=23.0.0",
+    "mypy>=1.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/snakers"
+Repository = "https://github.com/yourusername/snakers"
+Issues = "https://github.com/yourusername/snakers/issues"
+
+[project.scripts]
+snakers = "snakers.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["snakers*"]
+
+[tool.setuptools.package-data]
+snakers = ["exercises/**/*.py", "exercises/**/*.md"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py38"
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "B", "C4", "UP"]
+ignore = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
