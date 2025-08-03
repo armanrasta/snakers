@@ -5,6 +5,7 @@ Exercise runner and progress tracking.
 import json
 import subprocess
 import sys
+import shutil
 from pathlib import Path
 from typing import List, Optional
 
@@ -16,7 +17,7 @@ from rich.table import Table
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
-from .snakers.exercise import Exercise
+from .exercise import Exercise
 
 console = Console()
 
@@ -27,6 +28,10 @@ class ExerciseRunner:
         self.exercise_dir = exercise_dir
         self.progress_file = Path.home() / ".snakers_progress.json"
         self.progress = self.load_progress()
+        self.solutions_dir = Path(__file__).parent / "solutions"
+        
+        # Ensure solutions directory exists
+        self.solutions_dir.mkdir(exist_ok=True)
     
     def load_progress(self) -> dict:
         """Load progress from file."""
@@ -141,13 +146,22 @@ class ExerciseRunner:
                 self.runner = runner
             
             def on_modified(self, event):
-                if event.src_path.endswith('.py') and not event.is_directory:
-                    file_path = Path(event.src_path)
+                if str(event.src_path).endswith('.py') and not event.is_directory:
+                    file_path = Path(str(event.src_path))
                     if file_path.is_relative_to(self.runner.exercise_dir):
                         exercise = Exercise(file_path)
                         console.print(f"\n[cyan]🔄 File changed: {exercise.name}[/cyan]")
                         if exercise.check():
-                            console.print(f"[green]✅ {exercise.name} passed![/green]")
+                            # Save solution when exercise is completed
+                            self.runner._save_solution(exercise)
+                            
+                            # Update progress tracking
+                            if exercise.relative_path not in self.runner.progress["completed"]:
+                                self.runner.progress["completed"].append(exercise.relative_path)
+                                self.runner.save_progress()
+                                console.print(f"[green]✅ {exercise.name} passed and solution saved![/green]")
+                            else:
+                                console.print(f"[green]✅ {exercise.name} passed![/green]")
         
         event_handler = ChangeHandler(self)
         observer = Observer()
@@ -162,3 +176,71 @@ class ExerciseRunner:
         except KeyboardInterrupt:
             observer.stop()
             console.print("\n[yellow]👋 Stopped watching[/yellow]")
+    
+    # Add methods for solutions management
+    def list_solutions(self) -> None:
+        """List all saved solutions."""
+        solutions = list(self.solutions_dir.glob("**/*.py"))
+        
+        if not solutions:
+            console.print("[yellow]No solutions found yet. Complete some exercises first![/yellow]")
+            return
+        
+        table = Table(title="Available Solutions")
+        table.add_column("Exercise", style="cyan")
+        table.add_column("Path", style="dim")
+        
+        for solution in sorted(solutions):
+            rel_path = solution.relative_to(self.solutions_dir)
+            table.add_row(solution.stem, str(rel_path))
+        
+        console.print(table)
+    
+    def show_solution(self, exercise_name: str) -> None:
+        """Show a specific solution."""
+        solutions = list(self.solutions_dir.glob(f"**/{exercise_name}.py"))
+        
+        if not solutions:
+            console.print(f"[yellow]No solution found for '{exercise_name}'[/yellow]")
+            return
+        
+        solution = solutions[0]
+        content = solution.read_text()
+        syntax = Syntax(content, "python", theme="monokai", line_numbers=True)
+        
+        console.print(Panel(
+            f"[bold]Solution for:[/bold] {exercise_name}\n"
+            f"[bold]Path:[/bold] {solution.relative_to(self.solutions_dir)}",
+            title="Solution",
+            border_style="green"
+        ))
+        console.print(syntax)
+    
+    def reset_solutions(self) -> None:
+        """Reset all solutions by deleting them."""
+        if not self.solutions_dir.exists():
+            console.print("[yellow]No solutions directory found.[/yellow]")
+            return
+        
+        # Delete all Python files in the solutions directory recursively
+        for solution in self.solutions_dir.glob("**/*.py"):
+            solution.unlink()
+        
+        # Remove empty directories
+        for dir_path in sorted(self.solutions_dir.glob("**"), reverse=True):
+            if dir_path.is_dir() and not any(dir_path.iterdir()):
+                dir_path.rmdir()
+        
+        console.print("[yellow]All solutions have been reset.[/yellow]")
+    
+    def _save_solution(self, exercise: Exercise) -> None:
+        """Save a completed exercise as a solution."""
+        # Determine the solution path
+        solution_path = self.solutions_dir / exercise.relative_path
+        
+        # Create parent directories if they don't exist
+        solution_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        # Copy the exercise file to the solutions directory
+        shutil.copy2(exercise.path, solution_path)
+        console.print(f"[blue]Solution saved to {solution_path}[/blue]")

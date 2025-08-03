@@ -1,20 +1,25 @@
 #!/usr/bin/env python3
 """
 Snakers - Interactive Python exercises with Ruff linting
+
+This is a simple entry point script to run the Snakers package.
 """
 
-import subprocess
-import sys
-from pathlib import Path
-from typing import List, Optional
-import json
+from snakers.cli import main
 
+if __name__ == "__main__":
+    main()
 from rich.console import Console
 from rich.panel import Panel
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.syntax import Syntax
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+import sys
+import subprocess
+from typing import List, Optional
+from pathlib import Path
+import json
 
 console = Console()
 
@@ -135,8 +140,8 @@ class ExerciseRunner:
                 self.runner = runner
             
             def on_modified(self, event):
-                if event.src_path.endswith('.py'):
-                    file_path = Path(event.src_path)
+                if str(event.src_path).endswith('.py') and not event.is_directory:
+                    file_path = Path(str(event.src_path))
                     console.print(f"\n[cyan]File changed: {file_path.name}[/cyan]")
                     self.runner.check_exercise(file_path)
         

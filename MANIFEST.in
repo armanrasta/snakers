@@ -1,3 +1,5 @@
-include README.md
 include LICENSE
+include README.md
+include pyproject.toml
 recursive-include snakers/exercises *.py *.md
+recursive-include snakers/solutions *.md

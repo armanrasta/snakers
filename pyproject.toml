@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Interactive Python exercises with Ruff linting - Learn Python by fixing code!"
 readme = "README.md"
 license = {text = "MIT"}
-authors = [{name = "Your Name", email = "your.email@example.com"}]
+authors = [{name = "Arman Rostami", email = "arman.rostami@outlook.com"}]
 keywords = ["python", "learning", "exercises", "tutorial", "ruff", "linting"]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -35,6 +35,8 @@ dev = [
     "pytest>=7.0.0",
     "black>=23.0.0",
     "mypy>=1.0.0",
+    "build>=1.0.0",
+    "twine>=4.0.0",
 ]
 
 [project.urls]
@@ -43,14 +45,14 @@ Repository = "https://github.com/yourusername/snakers"
 Issues = "https://github.com/yourusername/snakers/issues"
 
 [project.scripts]
-snakers = "snakers.__main__:main"
+snakers = "snakers.__main__:run"
 
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["snakers*"]
 
 [tool.setuptools.package-data]
-snakers = ["exercises/**/*.py", "exercises/**/*.md"]
+snakers = ["exercises/**/*.py", "exercises/**/*.md", "solutions/**/*.md"]
 
 [tool.ruff]
 line-length = 88

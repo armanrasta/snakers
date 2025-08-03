@@ -15,40 +15,88 @@ pip install -e .
 
 ## Usage
 
+### Initialize the exercises
+```bash
+# Create exercises directory and files in current directory
+snakers init
+
+# Create in a specific directory
+snakers init --target /path/to/directory
+```
+
 ### Run the next exercise
 ```bash
-python snakers.py run
+# If installed via pip
+snakers run
+
+# Or using the module
+python -m snakers run
 ```
 
 ### Run a specific exercise
 ```bash
-python snakers.py run 01_variables
+snakers run 01_variables/01_basic_types
 ```
 
 ### Watch mode (auto-check on file changes)
 ```bash
-python snakers.py watch
+snakers watch
 ```
 
 ### List all exercises
 ```bash
-python snakers.py list
+snakers list
 ```
 
 ### Reset progress
 ```bash
-python snakers.py reset
+snakers reset
+```
+
+### Manage solutions
+```bash
+# List all saved solutions
+snakers solutions list
+
+# View a specific solution
+snakers solutions show 01_basic_types
+
+# Reset all solutions
+snakers solutions reset
+```
+
+### Get help
+```bash
+# General help
+snakers help
+
+# Topic-specific help
+snakers help init
+snakers help solutions
 ```
 
 ## Exercise Structure
 
 Exercises are organized in the `exercises/` directory by topic:
-
-- `01_basics/` - Variables, types, basic operations
-- `02_functions/` - Function definitions, parameters, returns
-- `03_data_structures/` - Lists, dictionaries, sets
-- `04_classes/` - Object-oriented programming
-- `05_modules/` - Imports, packages, modules
+- `00_intro/` - Introduction and environment setup
+- `01_variables/` - Variables, types, basic operations
+- `02_collections/` - Lists, dictionaries, tuples, sets
+- `03_functions/` - Function definitions, parameters, returns
+- `04_control_flow/` - Conditionals, loops, flow control
+- `05_exceptions/` - Error handling and exceptions
+- `06_classes/` - Object-oriented programming
+- `07_functional/` - Functional programming concepts
+- `08_file_io/` - File operations and data formats
+- `09_modules_packages/` - Imports, packages, modules
+- `10_advanced/` - Decorators, generators, advanced concepts
+- `11_testing/` - Unit testing and test-driven development
+- `12_concurrency/` - Threading, multiprocessing, async programming
+- `13_data/` - Data processing and analysis
+- `14_web/` - HTTP clients and web programming
+- `15_stdlib/` - Standard library modules
+- `16_project_management/` - Virtual environments, packaging, project structure
+- `17_design_patterns/` - Common design patterns
+- `18_regex/` - Regular expressions
 
 Each exercise file contains:
 - Learning objectives
