@@ -6,7 +6,7 @@ Interactive Python exercises with Ruff linting - Learn Python by fixing and comp
 
 ```bash
 # Clone the repository
-git clone <your-repo-url>
+git clone https://github.com/armanrasta/snakers.git
 cd snakers
 
 # Install dependencies

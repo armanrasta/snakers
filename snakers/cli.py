@@ -136,11 +136,11 @@ def main(exercises_dir: Optional[Path] = None):
         return
     
     # Initialize runner with exercises directory
-    if args.exercises_dir and args.exercises_dir.exists():
-        runner = ExerciseRunner(args.exercises_dir)
+    if exercises_dir and exercises_dir.exists():
+        runner = ExerciseRunner(exercises_dir)
     else:
         console.print("[red]Error: Exercises directory not found.[/red]")
-        console.print(f"Looking for: {args.exercises_dir}")
+        console.print(f"Looking for: {exercises_dir}")
         console.print("[yellow]Try running 'snakers init' to create the exercises directory.[/yellow]")
         sys.exit(1)
     

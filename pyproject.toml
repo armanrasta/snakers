@@ -4,12 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "snakers"
-version = "0.1.0"
-description = "Interactive Python exercises with Ruff linting - Learn Python by fixing code!"
+version = "0.1.4"
+description = "Interactive Python exercises for upcoming Junior learners - Learn Python by fixing code!"
 readme = "README.md"
 license = {text = "MIT"}
 authors = [{name = "Arman Rostami", email = "arman.rostami@outlook.com"}]
-keywords = ["python", "learning", "exercises", "tutorial", "ruff", "linting"]
+keywords = ["python", "learning", "exercises", "tutorial"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Education",
@@ -40,9 +40,9 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/snakers"
-Repository = "https://github.com/yourusername/snakers"
-Issues = "https://github.com/yourusername/snakers/issues"
+Homepage = "https://github.com/armanrasta/snakers"
+Repository = "https://github.com/armanrasta/snakers"
+Issues = "https://github.com/armanrasta/snakers/issues"
 
 [project.scripts]
 snakers = "snakers.__main__:run"
